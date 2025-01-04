@@ -1,0 +1,56 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+}
+
+.ExpensePage {
+  text-align: left;
+  margin: 20px auto;
+  max-width: 400px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ExpensePage form div {
+  margin-bottom: 15px;
+}
+
+.ExpensePage label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.ExpensePage input, .ExpensePage select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.ExpensePage button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.ExpensePage button:hover {
+  background-color: #45a049;
+}
