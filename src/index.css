@@ -31,7 +31,7 @@ body {
 }
 
 .ExpensePage label {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   margin-bottom: 5px;
 }
@@ -54,3 +54,4 @@ body {
 .ExpensePage button:hover {
   background-color: #45a049;
 }
+
