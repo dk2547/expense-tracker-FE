@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 export default function ExpensePage() {
     const [formData, setFormData] = useState({
       paidFor: '',
@@ -9,6 +10,7 @@ export default function ExpensePage() {
       customCategory: ''
     });
 
+
     const userList = [
         'Sameer',
         'Akriti'
@@ -16,42 +18,21 @@ export default function ExpensePage() {
 
     const [categoryList, setCategoryList] = useState([]);
     const [showCustomCategory, setCustomCategory] = useState(false)
+    const [disableSubmit,setDisableSubmit] = useState(false)
   
     useEffect(() => {
         getCategoryList()
     }, [])
 
     const getCategoryList=()=>{
-        setCategoryList(
-            [
-                'House Rent',
-'Outside Food',
-'Clothing',
-'Electricity/DTH/BroadBand',
-'maid',
-'Groceries',
-'Vegitables and Fruits',
-'Others',
-'Milk',
-'Mobile',
-'Water',
-'Other Transport',
-'Doctor/ medicines',
-'Entertainment/ hobbies',
-'Travel',
-'Personal growth',
-'Electronics',
-'Gift',
-'Personal Care',
-'kitto donation',
-'other'
-            ]
-        )
+      axios.get('https://expense-tracker-backend-po7m.onrender.com/expense/category').then(res=>{
+       setCategoryList([...res.data.categories, 'other'])
+
+    })
+
     }
 
     const handleChange = (e) => {
-        debugger
-       
       const { name, value } = e.target;
       if(name ==='category' && value ==='other'){
         setCustomCategory(true);
@@ -64,6 +45,7 @@ export default function ExpensePage() {
 
   
     const handleSubmit = async (e) => {
+        setDisableSubmit(true)
       e.preventDefault();
       const expenseData = preparePayload();
   
@@ -76,15 +58,31 @@ export default function ExpensePage() {
           body: JSON.stringify(expenseData),
         });
         if (response.ok) {
+            setDisableSubmit(false)
+            resetForm()
           alert('Expense added successfully!');
+
         } else {
+            setDisableSubmit(false)
           alert('Failed to add expense.');
         }
       } catch (error) {
+        setDisableSubmit(false)
         console.error('Error:', error);
         alert('An error occurred. Please try again.');
       }
     };
+
+    const resetForm=()=>{
+       setFormData( {
+            paidFor: '',
+            amount: '',
+            paidBy: 'Sameer',
+            category: 'House Rent',
+            transactionDate: '',
+            customCategory: ''
+          }) 
+    }
 
     const preparePayload =()=>{
         return {
@@ -143,7 +141,7 @@ export default function ExpensePage() {
               <input type="date" name="transactionDate" value={formData.transactionDate} onChange={handleChange} />
             </label>
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={disableSubmit}>Submit</button>
         </form>
       </div>
     );
