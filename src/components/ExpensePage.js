@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiService from '../service/expenseService'
 export default function ExpensePage() {
     const [formData, setFormData] = useState({
       paidFor: '',
@@ -24,11 +24,17 @@ export default function ExpensePage() {
         getCategoryList()
     }, [])
 
-    const getCategoryList=()=>{
-      axios.get('https://expense-tracker-backend-po7m.onrender.com/expense/category').then(res=>{
-       setCategoryList([...res.data.categories, 'other'])
-
-    })
+    const getCategoryList= async()=>{
+     
+        try {
+          const fetchedData = await apiService.fetchCategory();
+          setCategoryList([...fetchedData.categories, 'other'])
+          // setData(fetchedData);
+        } catch (err) {
+          // setError('Failed to load data');
+        } finally {
+          // setLoading(false);
+        }
 
     }
 
@@ -48,28 +54,25 @@ export default function ExpensePage() {
         setDisableSubmit(true)
       e.preventDefault();
       const expenseData = preparePayload();
-  
-      try {
-        const response = await fetch('https://expense-tracker-backend-po7m.onrender.com/expense', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(expenseData),
-        });
-        if (response.ok) {
-            setDisableSubmit(false)
-            resetForm()
-          alert('Expense added successfully!');
 
-        } else {
-            setDisableSubmit(false)
-          alert('Failed to add expense.');
+      try {
+        const fetchedData = await apiService.saveExpense(expenseData);
+        if(fetchedData){
+          setDisableSubmit(false)
+          resetForm()
+        alert('Expense added successfully!');
         }
-      } catch (error) {
+       
+        // setData(fetchedData);
+      } catch (err) {
         setDisableSubmit(false)
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
+          alert('Failed to add expense.');
+          setDisableSubmit(false)
+      //   console.error('Error:', error);
+      //   alert('An error occurred. Please try again.');
+        // setError('Failed to load data');
+      } finally {
+        // setLoading(false);
       }
     };
 
