@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
+import apiService from '../service/expenseService'
 export default function Dashboard(){
     
     const [expenseDetail,setExpenseDetail] = useState([])
@@ -21,7 +22,18 @@ export default function Dashboard(){
     //         setExpenseDetail(res.data.expenseList)
     //     })
     // }
-    const onDelete=(id)=>{
+    const onDelete= async(id)=>{
+
+        try {
+            await apiService.deleteExpense(id);
+            setUpdateTable(updateTable+1)
+          //   setCategoryList([...fetchedData.categories, 'other'])
+            // setData(fetchedData);
+          } catch (err) {
+            // setError('Failed to load data');
+          } finally {
+            // setLoading(false);
+          }
         axios.delete( `https://expense-tracker-backend-po7m.onrender.com/expense/${id}`).then(res=>{
             console.log(res)
             setUpdateTable(updateTable+1)
@@ -29,13 +41,25 @@ export default function Dashboard(){
         })
     }
     useEffect(() => {
-       
-            axios.get('https://expense-tracker-backend-po7m.onrender.com/expense').then(res=>{
-                setPending(false)
-                setExpenseDetail(res.data.expenseList)
-            })
+       getTableData();
             
     }, [updateTable])
+
+    const getTableData= async()=>{
+         
+            try {
+              const fetchedData = await apiService.getExpense();
+              setPending(false)
+              setExpenseDetail(fetchedData.expenseList)
+            //   setCategoryList([...fetchedData.categories, 'other'])
+              // setData(fetchedData);
+            } catch (err) {
+              // setError('Failed to load data');
+            } finally {
+              // setLoading(false);
+            }
+    
+        }
 
    
 
