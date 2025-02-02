@@ -101,16 +101,17 @@ export default function ExpensePage() {
       <div className="ExpensePage">
         <h2>Add Expense</h2>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label >
-              PaidFor:
-              <input placeholder="Paid For" type="text" name="paidFor" value={formData.paidFor} onChange={handleChange} required />
-            </label>
-          </div>
+          
           <div>
             <label >
               Amount:
               <input type="number" name="amount" value={formData.amount} onChange={handleChange} required />
+            </label>
+          </div>
+          <div>
+            <label >
+              Description:
+              <input placeholder="Description" type="text" name="paidFor" value={formData.paidFor} onChange={handleChange} required />
             </label>
           </div>
           <div>
