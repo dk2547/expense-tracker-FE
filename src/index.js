@@ -8,7 +8,6 @@ import Dashboard from "./components/Dashboard";
 import Report from "./components/Report";
 
 function App() {
-  console.log(process.env.REACT_APP_ENV)
   const router = createBrowserRouter([
     {
       path:"/",

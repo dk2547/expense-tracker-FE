@@ -3,7 +3,10 @@ import axios from 'axios';
 import DataTable from 'react-data-table-component';
 import apiService from '../service/expenseService';
 import moment from 'moment';
-import { FaEdit ,FaTrash, FaPe} from 'react-icons/fa'; 
+import { FaEdit ,FaTrash, FaTrashAlt} from 'react-icons/fa'; 
+import { MdEdit, MdDelete } from 'react-icons/md';
+import { FiEdit, FiTrash } from 'react-icons/fi';
+
 import "./dashboard.css"
 export default function Dashboard(){
     
@@ -44,6 +47,7 @@ export default function Dashboard(){
             }
     
         }
+        
     const column = [{name:'Paid For',selector: row => row.paidFor,cell: row => (
         <div>
           {editingRow === row.id ? (
@@ -105,11 +109,14 @@ export default function Dashboard(){
         {name:'Action',cell: row =>   (
             <div>
               {editingRow === row.id ? (
-                <button onClick={() => saveEdit(row.id)}>Save</button>
+                <>
+                <button className='save-btn' onClick={() => saveEdit(row.id)}>Save</button>
+                <button className='cancel-btn' onClick={() => cancel()}>Cancel</button>
+                </>
               ) : (
                 <>
-               <FaTrash  onClick={() => onDelete(row.id)}></FaTrash>
-                    <FaEdit className="icon" onClick={() => startEdit(row)}/>
+                      <MdEdit className="icon ic-edit" onClick={() => startEdit(row)}></MdEdit>
+                      <MdDelete className="icon icon-delete" onClick={() => onDelete(row.id)}></MdDelete>
                 </>
               )}
             </div>
@@ -167,6 +174,10 @@ export default function Dashboard(){
               // setLoading(false);
             }
     
+        }
+
+     const   cancel=()=>{
+          setEditingRow(null);
         }
 
    
