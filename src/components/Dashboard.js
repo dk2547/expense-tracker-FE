@@ -6,6 +6,7 @@ import moment from 'moment';
 import { FaEdit ,FaTrash, FaTrashAlt} from 'react-icons/fa'; 
 import { MdEdit, MdDelete } from 'react-icons/md';
 import { FiEdit, FiTrash } from 'react-icons/fi';
+import ConfirmationPopup from './ConfirmationPopup';
 
 import "./dashboard.css"
 export default function Dashboard(){
@@ -21,6 +22,9 @@ export default function Dashboard(){
         transactionDate: '',
         customCategory: ''});
      const [categoryList, setCategoryList] = useState([]);
+     const [isPopupVisible, setPopupVisible] = useState(false);
+     const [popupMessage, setPopupMessage] = useState('');
+     const [isDeleteActive, setDeleteActive] = useState(false);
 
         const userList = [
             'Sameer',
@@ -139,20 +143,54 @@ export default function Dashboard(){
             console.log(formData)
     }
     const saveEdit = (id)=>{
-        setUpdateTable(updateTable+1)
+      setPopupVisible(true);
+      setPopupMessage('Are you sure you want to save changes?');
+        // setUpdateTable(updateTable+1)
 
     }
+    const onSaveConfirm = (()=>{
+        console.log(formData)
+        setPopupVisible(false)
+        setEditingRow(null)
+        // axios.put(`https://expense-tracker-backend-po7m.onrender.com/expense/${formData.id}`,formData).then(res=>{
+        //     setEditingRow(null)
+        //     setUpdateTable(updateTable+1)
+        //
+    })
+    const onSaveCancel = (()=>{
+      console.log(formData)
+      setPopupVisible(false);
+      setEditingRow(null)
+      // axios.put(`https://expense-tracker-backend-po7m.onrender.com/expense/${formData.id}`,formData).then(res=>{
+      //     setEditingRow(null)
+      //     setUpdateTable(updateTable+1)
+      //
+  })
     const onDelete= async(id)=>{
+      setDeleteActive(true);
+      setEditingRow(id);
+      setPopupMessage('Are you sure you want to delete this record?');;
+      setPopupVisible(true);
 
-        try {
-            await apiService.deleteExpense(id);
-            setUpdateTable(updateTable+1)
-          //   setCategoryList([...fetchedData.categories, 'other'])
-            // setData(fetchedData);
-          } catch (err) {
-            // setError('Failed to load data');
-          } finally {
-          }
+       
+    }
+    const onDeleteConfirm = async()=>{
+      setDeleteActive(false);
+      setPopupVisible(false);
+      try {
+        await apiService.deleteExpense(editingRow);
+        setUpdateTable(updateTable+1)
+      //   setCategoryList([...fetchedData.categories, 'other'])
+        // setData(fetchedData);
+      } catch (err) {
+        // setError('Failed to load data');
+      } finally {
+      }
+    }
+   const onDeleteCancel = ()=>{
+      setDeleteActive(false);
+      setPopupVisible(false);
+      setEditingRow(null)
     }
     useEffect(() => {
         setEditingRow(null)
@@ -190,6 +228,7 @@ export default function Dashboard(){
             pagination
             progressPending={pending}
 		/>
+    {isPopupVisible && <ConfirmationPopup message={popupMessage} onConfirm={() => (isDeleteActive?onDeleteConfirm():onSaveConfirm())} onCancel={() => isDeleteActive?onDeleteCancel(): onSaveCancel()} />}
         </div>
     )
 }
