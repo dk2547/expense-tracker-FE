@@ -1,3 +1,4 @@
+/* @import "tailwindcss/postcss"; */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -7,7 +8,7 @@ body {
 
 .App {
   text-align: center;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .App-header {
@@ -53,5 +54,31 @@ body {
 
 .ExpensePage button:hover {
   background-color: #45a049;
+}
+.nav-container{
+  position:sticky;
+  position: -webkit-sticky;
+  background-color: darkseagreen;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-container ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
+.nav-container a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  padding: 10px;
+}
+.nav-container a:hover {
+  
+  color: #fff;
 }
 
