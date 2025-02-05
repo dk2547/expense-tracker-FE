@@ -48,7 +48,17 @@ const fetchCategory = async () => {
       throw error;
     }
   };
+  const editExpense = async (id,payload) => {
+    try {
+      const response = await api.put(`${environment.DELETE_EXPENSE}${id}`,payload);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  };
+
 
   export default {
-    fetchCategory,saveExpense,getExpense,deleteExpense
+    fetchCategory,saveExpense,getExpense,deleteExpense,editExpense
   };
