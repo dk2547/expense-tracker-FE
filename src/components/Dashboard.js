@@ -139,8 +139,7 @@ export default function Dashboard(){
             paidBy: row.paidBy,
             category: row.category,
             transactionDate: moment(row.transactionDate, "DD-MM-YYYY").toDate() ,
-            customCategory: ''})
-            console.log(formData)
+           })
     }
     const saveEdit = (id)=>{
       setPopupVisible(true);
@@ -148,14 +147,21 @@ export default function Dashboard(){
         // setUpdateTable(updateTable+1)
 
     }
-    const onSaveConfirm = (()=>{
+    const onSaveConfirm = (async()=>{
         console.log(formData)
         setPopupVisible(false)
         setEditingRow(null)
-        // axios.put(`https://expense-tracker-backend-po7m.onrender.com/expense/${formData.id}`,formData).then(res=>{
-        //     setEditingRow(null)
-        //     setUpdateTable(updateTable+1)
-        //
+        const id = formData.id;
+        delete formData.id;
+        try {
+          await apiService.editExpense(id,formData);
+          setUpdateTable(updateTable+1)
+        } catch (err) {
+          // setError('Failed to load data');
+        } finally {
+        }
+       
+        
     })
     const onSaveCancel = (()=>{
       console.log(formData)
