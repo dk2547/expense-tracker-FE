@@ -40,7 +40,7 @@ export default function ExpensePage() {
 
     const handleChange = (e) => {
       const { name, value } = e.target;
-      if(name ==='category' && value ==='other'){
+      if((name ==='category' && value ==='other')|| formData.category ==='other'){
         setCustomCategory(true);
     } else{
         setCustomCategory(false);

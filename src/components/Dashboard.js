@@ -133,12 +133,14 @@ export default function Dashboard(){
     //     })
     // }
     const startEdit = (row)=>{
+      const [day, month, year] = row.transactionDate.split("-"); 
+const formattedDate = `${year}-${month}-${day}`;
         setEditingRow(row.id);
         setFormData({ id: row.id, paidFor: row.paidFor,
             amount: row.amount,
             paidBy: row.paidBy,
             category: row.category,
-            transactionDate: moment(row.transactionDate, "DD-MM-YYYY").toDate() ,
+            transactionDate: formattedDate ,
            })
     }
     const saveEdit = (id)=>{
