@@ -25,6 +25,9 @@ export default function Dashboard(){
      const [isPopupVisible, setPopupVisible] = useState(false);
      const [popupMessage, setPopupMessage] = useState('');
      const [isDeleteActive, setDeleteActive] = useState(false);
+     const [page,setPage]= useState(0);
+     const [size, setSize]= useState(10);
+     const [totalRows, setTotalRows] = useState(null)
 
         const userList = [
             'Sameer',
@@ -204,14 +207,15 @@ const formattedDate = `${year}-${month}-${day}`;
         setEditingRow(null)
        getTableData();
             
-    }, [updateTable])
+    }, [updateTable,page,size])
 
     const getTableData= async()=>{
          
             try {
-              const fetchedData = await apiService.getExpense();
+              const fetchedData = await apiService.getExpense(page,size);
               setPending(false)
               setExpenseDetail(fetchedData.expenseList)
+              setTotalRows(fetchedData.pagination.totalElements)
             //   setCategoryList([...fetchedData.categories, 'other'])
               // setData(fetchedData);
             } catch (err) {
@@ -226,6 +230,16 @@ const formattedDate = `${year}-${month}-${day}`;
           setEditingRow(null);
         }
 
+      const  handlePerRowsChange= (newPerPage, page)=>{
+          setPending(true);
+		setSize(newPerPage);
+
+        }
+     const   handlePageChange= (page)=>{
+          setPending(true);
+          setPage(page-1)
+        }
+
    
 
     return(
@@ -235,6 +249,10 @@ const formattedDate = `${year}-${month}-${day}`;
 			data={expenseDetail}
             pagination
             progressPending={pending}
+            paginationServer
+			paginationTotalRows={totalRows}
+			onChangeRowsPerPage={handlePerRowsChange}
+			onChangePage={handlePageChange}
 		/>
     {isPopupVisible && <ConfirmationPopup message={popupMessage} onConfirm={() => (isDeleteActive?onDeleteConfirm():onSaveConfirm())} onCancel={() => isDeleteActive?onDeleteCancel(): onSaveCancel()} />}
         </div>
