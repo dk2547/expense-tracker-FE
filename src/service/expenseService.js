@@ -29,9 +29,10 @@ const fetchCategory = async () => {
     }
   };
 
-  const getExpense = async () => {
+  const getExpense = async (page,size) => {
+    const url = `${environment.EXPENSE}?page=${page}&size=${size}`
     try {
-      const response = await api.get(environment.EXPENSE);
+      const response = await api.get(url);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
