@@ -50,5 +50,30 @@ pipeline {
                 """
             }
         }
+
+        stage('Cleanup DockerHub Images') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        # Get token
+                        TOKEN=$(curl -s -H "Content-Type: application/json" -X POST \
+                          -d "{\\"username\\": \\"$DOCKER_USER\\", \\"password\\": \\"$DOCKER_PASS\\"}" \
+                          https://hub.docker.com/v2/users/login/ | jq -r .token)
+
+                        # Get list of tags (sorted by last_updated desc)
+                        TAGS=$(curl -s -H "Authorization: JWT $TOKEN" \
+                          "https://hub.docker.com/v2/repositories/$REGISTRY/$IMAGE_NAME/tags/?page_size=100" \
+                          | jq -r '.results|sort_by(.last_updated)|reverse|.[10:]|.[].name')
+
+                        # Delete tags after keeping latest 10
+                        for tag in $TAGS; do
+                          echo "Deleting remote image: $REGISTRY/$IMAGE_NAME:$tag"
+                          curl -s -X DELETE -H "Authorization: JWT $TOKEN" \
+                            "https://hub.docker.com/v2/repositories/$REGISTRY/$IMAGE_NAME/tags/$tag/"
+                        done
+                    '''
+                }
+            }
+        }
     }
 }
