@@ -11,7 +11,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # default to prod, but override at runtime
-ENV REACT_APP_ENV=prod
+ENV REACT_APP_ENV=PROD
 
 COPY --from=build /app/build /usr/share/nginx/html
 
