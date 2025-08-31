@@ -5,5 +5,6 @@ export const getApiEndPoints = (hostURL='')=>{
         GET_CATAGORY: `${hostURL}/expense/category`,
         EXPENSE: `${hostURL}/expense`,
         DELETE_EXPENSE: `${hostURL}/expense/`,
+        GET_REPORT: `${hostURL}/reports`
     }
 }
