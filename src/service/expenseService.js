@@ -59,7 +59,17 @@ const fetchCategory = async () => {
     }
   };
 
+  const getReport = async () => {
+    const url = `${environment.GET_REPORT}`
+    try {
+      const response = await api.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  };
 
   export default {
-    fetchCategory,saveExpense,getExpense,deleteExpense,editExpense
+    fetchCategory,saveExpense,getExpense,deleteExpense,editExpense,getReport
   };
